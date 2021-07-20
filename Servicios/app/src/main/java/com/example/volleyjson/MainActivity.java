@@ -31,10 +31,11 @@ public class MainActivity extends AppCompatActivity {
     Button APIUsersButton, APIRepositoriesButton, listar;
     TextView dato;
     String url= "";
+    Boolean apiuser=false, apirepo=false;
 
 
-    ArrayList<Users> ListUsers = new ArrayList<Users>();
-    ArrayList<Repositories> ListRepos = new ArrayList<Repositories>();
+
+    ArrayList<ApiInfo> ListUsers = new ArrayList<ApiInfo>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,25 +50,30 @@ public class MainActivity extends AppCompatActivity {
         APIUsersButton.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
+
                  url="https://api.github.com/users";
                  requestDatos();
+                 apiuser=true;
              }
          });
 
         APIRepositoriesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 url="https://api.github.com/repositories";
                 requestDatos();
+                apirepo=true;
             }
         });
 
         listar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), ListadoUsers.class);
+                Intent i = new Intent(getApplicationContext(), ListadoInfo.class);
                 i.putParcelableArrayListExtra("apiInfo", ListUsers);
                 startActivity(i);
+                ListUsers.clear();
             }
         });
     }
@@ -78,7 +84,14 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        dato.setText("Se han leido los datos de la API");
+                        String mensaje="";
+                        if(apiuser){
+                            mensaje="Se han leido los datos de la API Users";
+                        }
+                        if(apirepo){
+                            mensaje="Se han leido los datos de la API Repositories";
+                        }
+                        dato.setText(mensaje);
                         parserJson(response);
                     }
 
@@ -102,32 +115,44 @@ public class MainActivity extends AppCompatActivity {
 
             // SI USAR LA URL DE REPOSITORIOS, PUES DARÁ ERROR PORQUE EL CAMPO LOGIN NO EXISTE EN EL ARRAY
             //API Users
-            JSONArray users = response;
 
-            for (int i = 0 ; i<users.length(); i++) {
-                JSONObject com = users.getJSONObject(i);
-                String id = com.getString("id");
-                String login = com.getString("login");
-                String url = com.getString("html_url");
-                Users co = new Users(id,login,url);
-                ListUsers.add(co);
+            if(apiuser){
+                JSONArray users = response;
+
+                for (int i = 0 ; i<users.length(); i++) {
+                    JSONObject user = users.getJSONObject(i);
+                    String id = user.getString("id");
+                    String login = user.getString("login");
+                    String url = user.getString("html_url");
+                    ApiInfo co = new ApiInfo(id,login,url);
+                    ListUsers.add(co);
+                }
+
             }
+
+
 
 
             // ASÍ SE LEEN LOS DATOS DEL Repositorio, esta parte es tuya
-            /*
-            //API Repos
-            JSONArray repositories=response;
 
-            for (int i = 0 ; i<repositories.length(); i++) {
-                JSONObject com = repositories.getJSONObject(i);
-                String id = com.getString("id");
-                String html_url = com.getString("html_url");
-                String description = com.getString("description");
-                Repositories co = new Repositories(id,html_url,description);
-                ListRepos.add(co);
+            //API Repos
+            if(apirepo){
+                JSONArray repositories=response;
+
+                for (int i = 0 ; i<repositories.length(); i++) {
+                    JSONObject rep = repositories.getJSONObject(i);
+                    String id = rep.getString("id");
+                    String html_url = rep.getString("name");
+                    String description = rep.getString("html_url");
+                    ApiInfo co = new ApiInfo(id,html_url,description);
+                    ListUsers.add(co);
+                }
             }
-             */
+
+            apiuser=false;
+            apirepo=false;
+
+
 
 
         }

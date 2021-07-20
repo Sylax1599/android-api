@@ -11,19 +11,19 @@ import java.util.ArrayList;
 
 
 
-public class ListadoUsers extends AppCompatActivity {
+public class ListadoInfo extends AppCompatActivity {
 
-    ArrayList<Users> users = new ArrayList<Users>();
+    ArrayList<ApiInfo> api_info = new ArrayList<ApiInfo>();
     ListView listado;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_listado_equipos);
+        setContentView(R.layout.activity_listado_api);
         Intent i = getIntent();
-        users = i.getParcelableArrayListExtra("apiInfo");
+        api_info = i.getParcelableArrayListExtra("apiInfo");
         listado = findViewById(R.id.lstcompetitions);
-        if (users!=null && users.size()>0){
-           UsersAdapter adapter = new UsersAdapter(this, users);
+        if (api_info!=null && api_info.size()>0){
+           ApiInfoAdapter adapter = new ApiInfoAdapter(this, api_info);
            listado.setAdapter(adapter);
            adapter.notifyDataSetChanged();
            }

@@ -3,32 +3,32 @@ package com.example.volleyjson;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Users implements Parcelable{
+public class ApiInfo implements Parcelable{
     private String id;
     private String name;
     private String url;
 
-    public Users(String id, String name, String area) {
+    public ApiInfo(String id, String name, String url) {
         this.id = id;
         this.name = name;
-        this.url = area;
+        this.url = url;
     }
 
-    protected Users(Parcel in) {
+    protected ApiInfo(Parcel in) {
         id = in.readString();
         name = in.readString();
         url = in.readString();
     }
 
-    public static final Creator<Users> CREATOR = new Creator<Users>() {
+    public static final Creator<ApiInfo> CREATOR = new Creator<ApiInfo>() {
         @Override
-        public Users createFromParcel(Parcel in) {
-            return new Users(in);
+        public ApiInfo createFromParcel(Parcel in) {
+            return new ApiInfo(in);
         }
 
         @Override
-        public Users[] newArray(int size) {
-            return new Users[size];
+        public ApiInfo[] newArray(int size) {
+            return new ApiInfo[size];
         }
     };
 
@@ -62,7 +62,7 @@ public class Users implements Parcelable{
         return "Competition{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", area='" + url + '\'' +
+                ", url='" + url + '\'' +
                 '}';
     }
 
